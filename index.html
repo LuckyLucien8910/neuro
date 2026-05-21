@@ -329,7 +329,7 @@ nav a.active{color:var(--teal);background:var(--tdim)}
       <div class="device-meta">
         <div class="meta-chip"><div class="val">98.4%</div><div class="lbl">Signal quality</div></div>
         <div class="meta-chip"><div class="val">14 ms</div><div class="lbl">Latency</div></div>
-        <div class="meta-chip"><div class="val" id="battVal">83%</div><div class="lbl">Battery</div></div>
+        <div class="meta-chip"><div class="val">83%</div><div class="lbl">Battery</div></div>
       </div>
     </div>
 
@@ -476,8 +476,8 @@ nav a.active{color:var(--teal);background:var(--tdim)}
         <div class="settings-section">
           <h3>Personal Information</h3>
           <div class="form-row">
-            <div class="form-group"><label>First name</label><input class="form-input" id="firstName" value="Alex"/></div>
-            <div class="form-group"><label>Last name</label><input class="form-input" id="lastName" value="Kim"/></div>
+            <div class="form-group"><label>First name</label><input class="form-input" value="Alex"/></div>
+            <div class="form-group"><label>Last name</label><input class="form-input" value="Kim"/></div>
           </div>
           <div class="form-row">
             <div class="form-group"><label>Email</label><input class="form-input" value="alex.kim@email.com"/></div>
@@ -597,284 +597,165 @@ nav a.active{color:var(--teal);background:var(--tdim)}
 </main>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────────────────────
-const BUYERS = [
-  { id:'mit',      name:'MIT Computational Lab',  abbr:'MIT', cat:'research',   catLabel:'Research',   chip:'chip-blue',   logoBg:'rgba(59,130,246,.15)',  logoColor:'#93c5fd', type:'Academic Research · Cambridge, MA',   monthly:48,  enrolled:312,  desc:'Studying neural correlates of attention and sustained focus in knowledge workers. IRB-approved study running Q2–Q4 2026.', seeking:'Attention patterns, Focus tracking, Theta band activity' },
-  { id:'np',       name:'NeuroPharma Inc.',        abbr:'NP',  cat:'healthcare', catLabel:'Healthcare', chip:'chip-teal',   logoBg:'rgba(94,227,180,.12)',  logoColor:'#5ee3b4', type:'Pharmaceutical · Basel, CH',           monthly:62,  enrolled:88,   desc:'Developing cognitive fatigue biomarkers for clinical trial screening. Data contributes to FDA-track neurology pipeline.', seeking:'Cognitive load, Fatigue signatures, Alpha suppression' },
-  { id:'om',       name:'OpenMind AI Systems',     abbr:'OM',  cat:'ai',         catLabel:'AI Training',chip:'chip-purple', logoBg:'rgba(139,92,246,.15)',  logoColor:'#c4b5fd', type:'AI Research Lab · San Francisco, CA',  monthly:29,  enrolled:5201, desc:'Building the world\'s largest annotated neural dataset for training next-gen brain-aligned language models.', seeking:'Neural embeddings, Semantic processing, P300 responses' },
-  { id:'bl',       name:'BrandLens Research',      abbr:'BL',  cat:'advertising',catLabel:'Advertising',chip:'chip-amber',  logoBg:'rgba(251,191,36,.12)',  logoColor:'#fbbf24', type:'Market Research · New York, NY',       monthly:32,  enrolled:1840, desc:'Measuring subconscious emotional responses to brand stimuli for Fortune 500 clients. GDPR & CCPA compliant.', seeking:'Emotional valence, Arousal, Reward circuit activity' },
-  { id:'hx',       name:'HapticsX Robotics',       abbr:'HX',  cat:'robotics',   catLabel:'Robotics',   chip:'chip-pink',   logoBg:'rgba(244,114,182,.12)', logoColor:'#fbcfe8', type:'Robotics · Austin, TX',               monthly:15,  enrolled:203,  desc:'Improving prosthetic limb control with fine-grained motor intent signals. Working with VA hospitals nationwide.', seeking:'Motor intent, Spatial awareness, Beta oscillations' },
-  { id:'sn',       name:'Stanford NeuroSci Dept.', abbr:'SN',  cat:'research',   catLabel:'Research',   chip:'chip-green',  logoBg:'rgba(34,197,94,.12)',   logoColor:'#86efac', type:'Academic Research · Palo Alto, CA',   monthly:55,  enrolled:144,  desc:'Longitudinal study on sleep-memory consolidation patterns. Requires overnight EEG sessions with opt-in sleep mode.', seeking:'Sleep stages, Memory replay, Spindle detection' },
-  { id:'dm',       name:'DeepMind Health',         abbr:'DM',  cat:'ai',         catLabel:'AI Training',chip:'chip-purple', logoBg:'rgba(139,92,246,.15)',  logoColor:'#c4b5fd', type:'AI Research · London, UK',             monthly:78,  enrolled:622,  desc:'Training multimodal healthcare AI with paired neural-behavioral data. Competitive rates for high signal-quality contributors.', seeking:'ERP components, Cross-modal binding, ICA components' },
-  { id:'cn',       name:'CortexNova Diagnostics',  abbr:'CN',  cat:'healthcare', catLabel:'Healthcare', chip:'chip-teal',   logoBg:'rgba(94,227,180,.12)',  logoColor:'#5ee3b4', type:'MedTech · Boston, MA',                monthly:90,  enrolled:56,   desc:'Building early-detection biomarker panels for neurodegenerative conditions. FDA Breakthrough Device designation.', seeking:'Slow wave activity, Connectivity patterns, Biomarkers' },
-  { id:'pm',       name:'Prism Media Labs',        abbr:'PM',  cat:'advertising',catLabel:'Advertising',chip:'chip-amber',  logoBg:'rgba(251,191,36,.12)',  logoColor:'#fbbf24', type:'Entertainment Research · LA, CA',     monthly:22,  enrolled:3108, desc:'Optimizing streaming content cuts and soundtrack timing based on real-time audience neural engagement data.', seeking:'Engagement spikes, Boredom signatures, Attention dips' },
-];
+const BUYERS=[{id:'mit',name:'MIT Computational Lab',abbr:'MIT',cat:'research',catLabel:'Research',chip:'chip-blue',logoBg:'rgba(59,130,246,.15)',logoColor:'#93c5fd',type:'Academic Research · Cambridge, MA',monthly:48,enrolled:312,desc:'Studying neural correlates of attention and sustained focus in knowledge workers. IRB-approved study running Q2–Q4 2026.',seeking:'Attention patterns, Focus tracking, Theta band activity'},{id:'np',name:'NeuroPharma Inc.',abbr:'NP',cat:'healthcare',catLabel:'Healthcare',chip:'chip-teal',logoBg:'rgba(94,227,180,.12)',logoColor:'#5ee3b4',type:'Pharmaceutical · Basel, CH',monthly:62,enrolled:88,desc:'Developing cognitive fatigue biomarkers for clinical trial screening. Data contributes to FDA-track neurology pipeline.',seeking:'Cognitive load, Fatigue signatures, Alpha suppression'},{id:'om',name:'OpenMind AI Systems',abbr:'OM',cat:'ai',catLabel:'AI Training',chip:'chip-purple',logoBg:'rgba(139,92,246,.15)',logoColor:'#c4b5fd',type:'AI Research Lab · San Francisco, CA',monthly:29,enrolled:5201,desc:"Building the world's largest annotated neural dataset for training next-gen brain-aligned language models.",seeking:'Neural embeddings, Semantic processing, P300 responses'},{id:'bl',name:'BrandLens Research',abbr:'BL',cat:'advertising',catLabel:'Advertising',chip:'chip-amber',logoBg:'rgba(251,191,36,.12)',logoColor:'#fbbf24',type:'Market Research · New York, NY',monthly:32,enrolled:1840,desc:'Measuring subconscious emotional responses to brand stimuli for Fortune 500 clients. GDPR & CCPA compliant.',seeking:'Emotional valence, Arousal, Reward circuit activity'},{id:'hx',name:'HapticsX Robotics',abbr:'HX',cat:'robotics',catLabel:'Robotics',chip:'chip-pink',logoBg:'rgba(244,114,182,.12)',logoColor:'#fbcfe8',type:'Robotics · Austin, TX',monthly:15,enrolled:203,desc:'Improving prosthetic limb control with fine-grained motor intent signals. Working with VA hospitals nationwide.',seeking:'Motor intent, Spatial awareness, Beta oscillations'},{id:'sn',name:'Stanford NeuroSci Dept.',abbr:'SN',cat:'research',catLabel:'Research',chip:'chip-green',logoBg:'rgba(34,197,94,.12)',logoColor:'#86efac',type:'Academic Research · Palo Alto, CA',monthly:55,enrolled:144,desc:'Longitudinal study on sleep-memory consolidation patterns. Requires overnight EEG sessions with opt-in sleep mode.',seeking:'Sleep stages, Memory replay, Spindle detection'},{id:'dm',name:'DeepMind Health',abbr:'DM',cat:'ai',catLabel:'AI Training',chip:'chip-purple',logoBg:'rgba(139,92,246,.15)',logoColor:'#c4b5fd',type:'AI Research · London, UK',monthly:78,enrolled:622,desc:'Training multimodal healthcare AI with paired neural-behavioral data. Competitive rates for high signal-quality contributors.',seeking:'ERP components, Cross-modal binding, ICA components'},{id:'cn',name:'CortexNova Diagnostics',abbr:'CN',cat:'healthcare',catLabel:'Healthcare',chip:'chip-teal',logoBg:'rgba(94,227,180,.12)',logoColor:'#5ee3b4',type:'MedTech · Boston, MA',monthly:90,enrolled:56,desc:'Building early-detection biomarker panels for neurodegenerative conditions. FDA Breakthrough Device designation.',seeking:'Slow wave activity, Connectivity patterns, Biomarkers'},{id:'pm',name:'Prism Media Labs',abbr:'PM',cat:'advertising',catLabel:'Advertising',chip:'chip-amber',logoBg:'rgba(251,191,36,.12)',logoColor:'#fbbf24',type:'Entertainment Research · LA, CA',monthly:22,enrolled:3108,desc:'Optimizing streaming content cuts and soundtrack timing based on real-time audience neural engagement data.',seeking:'Engagement spikes, Boredom signatures, Attention dips'}];
 
-const STATE = {
-  connected: new Set(['mit','np','om','bl','hx']),
-  lifetime: 1247.85,
-  transactions: [
-    { date:'May 20, 2026', buyer:'MIT Computational Lab', cat:'Research', chip:'chip-blue', amount:12.00, duration:'6.0 h' },
-    { date:'May 19, 2026', buyer:'NeuroPharma Inc.',      cat:'Healthcare',chip:'chip-teal', amount:15.63, duration:'7.8 h' },
-    { date:'May 18, 2026', buyer:'OpenMind AI Systems',   cat:'AI Training',chip:'chip-purple',amount:7.25,duration:'3.6 h' },
-    { date:'May 17, 2026', buyer:'BrandLens Research',    cat:'Advertising',chip:'chip-amber', amount:7.98, duration:'4.0 h' },
-    { date:'May 15, 2026', buyer:'HapticsX Robotics',     cat:'Robotics',  chip:'chip-pink',  amount:3.75, duration:'3.8 h' },
-    { date:'May 14, 2026', buyer:'MIT Computational Lab', cat:'Research',  chip:'chip-blue',  amount:11.00,duration:'5.5 h' },
-    { date:'May 12, 2026', buyer:'NeuroPharma Inc.',      cat:'Healthcare',chip:'chip-teal',  amount:16.20,duration:'8.1 h' },
-    { date:'May 10, 2026', buyer:'OpenMind AI Systems',   cat:'AI Training',chip:'chip-purple',amount:8.44,duration:'4.2 h' },
-  ]
-};
+const STATE={connected:new Set(['mit','np','om','bl','hx']),lifetime:1247.85,transactions:[{date:'May 20, 2026',buyer:'MIT Computational Lab',cat:'Research',chip:'chip-blue',amount:12.00,duration:'6.0 h'},{date:'May 19, 2026',buyer:'NeuroPharma Inc.',cat:'Healthcare',chip:'chip-teal',amount:15.63,duration:'7.8 h'},{date:'May 18, 2026',buyer:'OpenMind AI Systems',cat:'AI Training',chip:'chip-purple',amount:7.25,duration:'3.6 h'},{date:'May 17, 2026',buyer:'BrandLens Research',cat:'Advertising',chip:'chip-amber',amount:7.98,duration:'4.0 h'},{date:'May 15, 2026',buyer:'HapticsX Robotics',cat:'Robotics',chip:'chip-pink',amount:3.75,duration:'3.8 h'},{date:'May 14, 2026',buyer:'MIT Computational Lab',cat:'Research',chip:'chip-blue',amount:11.00,duration:'5.5 h'},{date:'May 12, 2026',buyer:'NeuroPharma Inc.',cat:'Healthcare',chip:'chip-teal',amount:16.20,duration:'8.1 h'},{date:'May 10, 2026',buyer:'OpenMind AI Systems',cat:'AI Training',chip:'chip-purple',amount:8.44,duration:'4.2 h'}]};
 
-function monthlyRate() {
-  return BUYERS.filter(b => STATE.connected.has(b.id)).reduce((s,b) => s+b.monthly, 0);
+function monthlyRate(){return BUYERS.filter(b=>STATE.connected.has(b.id)).reduce((s,b)=>s+b.monthly,0)}
+
+function renderHero(){
+  const m=monthlyRate();
+  document.getElementById('heroTotal').textContent=STATE.lifetime.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('heroMonthly').textContent=m.toFixed(2);
+  document.getElementById('heroLicenses').textContent=STATE.connected.size;
 }
 
-// ─── RENDER ───────────────────────────────────────────────────────────────────
-function renderHero() {
-  const m = monthlyRate();
-  document.getElementById('heroTotal').textContent = STATE.lifetime.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-  document.getElementById('heroMonthly').textContent = m.toFixed(2);
-  document.getElementById('heroLicenses').textContent = STATE.connected.size;
+function renderLicenses(){
+  const items=BUYERS.filter(b=>STATE.connected.has(b.id));
+  document.getElementById('licenseGrid').innerHTML=items.length?items.map(b=>`<div class="license-item"><div class="lic-left"><span class="lic-buyer">${b.name}</span><span class="lic-category">${b.seeking.split(',')[0]}</span><span class="category-chip ${b.chip}" style="margin-top:.35rem">${b.catLabel}</span></div><div class="lic-right"><span class="lic-amount">$${b.monthly}.00</span><span class="lic-period">/ month</span><button class="btn btn-danger btn-sm" style="margin-top:.4rem" onclick="confirmDisconnect('${b.id}')">Disconnect</button></div></div>`).join(''):'<p style="color:var(--m);font-size:.85rem;padding:.5rem 0">No active licenses. Visit the Marketplace to connect with buyers.</p>';
 }
 
-function renderLicenses() {
-  const items = BUYERS.filter(b => STATE.connected.has(b.id));
-  document.getElementById('licenseGrid').innerHTML = items.length ? items.map(b => `
-    <div class="license-item">
-      <div class="lic-left">
-        <span class="lic-buyer">${b.name}</span>
-        <span class="lic-category">${b.seeking.split(',')[0]}</span>
-        <span class="category-chip ${b.chip}" style="margin-top:.35rem">${b.catLabel}</span>
-      </div>
-      <div class="lic-right">
-        <span class="lic-amount">$${b.monthly}.00</span>
-        <span class="lic-period">/ month</span>
-        <button class="btn btn-danger btn-sm" style="margin-top:.4rem" onclick="confirmDisconnect('${b.id}')">Disconnect</button>
-      </div>
-    </div>`).join('') : '<p style="color:var(--m);font-size:.85rem;padding:.5rem 0">No active licenses. Visit the Marketplace to connect with buyers.</p>';
+function renderTransactions(bodyId,limit){
+  const rows=STATE.transactions.slice(0,limit||5);
+  const showDur=bodyId==='txBodyAnalytics';
+  document.getElementById(bodyId).innerHTML=rows.map(t=>`<tr><td class="tx-date">${t.date}</td><td class="tx-buyer">${t.buyer}</td><td><span class="category-chip ${t.chip}">${t.cat}</span></td>${showDur?`<td style="color:var(--m);font-size:.8rem">${t.duration||'—'}</td>`:''}<td class="tx-amount">+$${t.amount.toFixed(2)}</td></tr>`).join('');
 }
 
-function renderTransactions(bodyId, limit) {
-  const rows = STATE.transactions.slice(0, limit||5);
-  const showDuration = bodyId === 'txBodyAnalytics';
-  document.getElementById(bodyId).innerHTML = rows.map(t => `
-    <tr>
-      <td class="tx-date">${t.date}</td>
-      <td class="tx-buyer">${t.buyer}</td>
-      <td><span class="category-chip ${t.chip}">${t.cat}</span></td>
-      ${showDuration ? `<td style="color:var(--m);font-size:.8rem">${t.duration||'—'}</td>` : ''}
-      <td class="tx-amount">+$${t.amount.toFixed(2)}</td>
-    </tr>`).join('');
+function renderAnalyticsKPIs(){
+  document.getElementById('kpiTotal').textContent='$'+Math.floor(STATE.lifetime).toLocaleString();
+  document.getElementById('kpiMonthly').textContent='$'+monthlyRate();
+  document.getElementById('kpiLicCount').textContent=STATE.connected.size+' active license'+(STATE.connected.size===1?'':'s');
 }
 
-function renderAnalyticsKPIs() {
-  document.getElementById('kpiTotal').textContent = '$' + Math.floor(STATE.lifetime).toLocaleString();
-  document.getElementById('kpiMonthly').textContent = '$' + monthlyRate();
-  document.getElementById('kpiLicCount').textContent = STATE.connected.size + ' active license' + (STATE.connected.size===1?'':'s');
-}
-
-function renderMarketplace() {
-  document.getElementById('mktGrid').innerHTML = BUYERS.map(b => {
-    const isConnected = STATE.connected.has(b.id);
-    return `<div class="mkt-card" data-cat="${b.cat}">
-      <div class="mkt-card-head">
-        <div style="display:flex;align-items:center;gap:.75rem">
-          <div class="mkt-logo" style="background:${b.logoBg};color:${b.logoColor}">${b.abbr}</div>
-          <div><div class="mkt-name">${b.name}</div><div class="mkt-type">${b.type}</div></div>
-        </div>
-        <span class="category-chip ${b.chip}">${b.catLabel}</span>
-      </div>
-      <p class="mkt-desc">${b.desc}</p>
-      <p class="mkt-seeking">Seeking: <strong>${b.seeking}</strong></p>
-      <div class="mkt-footer">
-        <div>
-          <div class="mkt-price">$${b.monthly} <span>/ month</span></div>
-          <div style="font-size:.7rem;color:var(--m);margin-top:.1rem">${b.enrolled.toLocaleString()} users enrolled</div>
-        </div>
-        ${isConnected
-          ? `<span class="connected-badge" onclick="confirmDisconnect('${b.id}')"><div class="connected-dot"></div>Connected ✕</span>`
-          : `<button class="btn btn-teal btn-sm" id="mkt-btn-${b.id}" onclick="connectBuyer('${b.id}')">Connect</button>`}
-      </div>
-    </div>`;
+function renderMarketplace(){
+  document.getElementById('mktGrid').innerHTML=BUYERS.map(b=>{
+    const isCon=STATE.connected.has(b.id);
+    return`<div class="mkt-card" data-cat="${b.cat}"><div class="mkt-card-head"><div style="display:flex;align-items:center;gap:.75rem"><div class="mkt-logo" style="background:${b.logoBg};color:${b.logoColor}">${b.abbr}</div><div><div class="mkt-name">${b.name}</div><div class="mkt-type">${b.type}</div></div></div><span class="category-chip ${b.chip}">${b.catLabel}</span></div><p class="mkt-desc">${b.desc}</p><p class="mkt-seeking">Seeking: <strong>${b.seeking}</strong></p><div class="mkt-footer"><div><div class="mkt-price">$${b.monthly} <span>/ month</span></div><div style="font-size:.7rem;color:var(--m);margin-top:.1rem">${b.enrolled.toLocaleString()} users enrolled</div></div>${isCon?`<span class="connected-badge" onclick="confirmDisconnect('${b.id}')"><div class="connected-dot"></div>Connected ✕</span>`:`<button class="btn btn-teal btn-sm" id="mkt-btn-${b.id}" onclick="connectBuyer('${b.id}')">Connect</button>`}</div></div>`;
   }).join('');
-  document.getElementById('mktSubtitle').textContent =
-    BUYERS.length + ' buyers · ' + STATE.connected.size + ' connected';
+  document.getElementById('mktSubtitle').textContent=BUYERS.length+' buyers · '+STATE.connected.size+' connected';
 }
 
-function renderAll() {
-  renderHero();
-  renderLicenses();
-  renderTransactions('txBodyDash', 5);
-  renderTransactions('txBodyAnalytics', 20);
-  renderAnalyticsKPIs();
-  renderMarketplace();
-}
+function renderAll(){renderHero();renderLicenses();renderTransactions('txBodyDash',5);renderTransactions('txBodyAnalytics',20);renderAnalyticsKPIs();renderMarketplace();}
 
-// ─── CONNECT / DISCONNECT ─────────────────────────────────────────────────────
-function connectBuyer(id) {
-  const b = BUYERS.find(x => x.id===id);
-  if (!b || STATE.connected.has(id)) return;
-  const btn = document.getElementById('mkt-btn-'+id);
-  if (btn) { btn.textContent='Connecting…'; btn.disabled=true; }
-  setTimeout(() => {
+function connectBuyer(id){
+  const b=BUYERS.find(x=>x.id===id);
+  if(!b||STATE.connected.has(id))return;
+  const btn=document.getElementById('mkt-btn-'+id);
+  if(btn){btn.textContent='Connecting…';btn.disabled=true;}
+  setTimeout(()=>{
     STATE.connected.add(id);
-    const signOn = parseFloat((b.monthly/30).toFixed(2));
-    STATE.lifetime = parseFloat((STATE.lifetime + signOn).toFixed(2));
-    const now = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    STATE.transactions.unshift({ date:now, buyer:b.name, cat:b.catLabel, chip:b.chip, amount:signOn, duration:'0.5 h' });
+    const signOn=parseFloat((b.monthly/30).toFixed(2));
+    STATE.lifetime=parseFloat((STATE.lifetime+signOn).toFixed(2));
+    const now=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    STATE.transactions.unshift({date:now,buyer:b.name,cat:b.catLabel,chip:b.chip,amount:signOn,duration:'0.5 h'});
     renderAll();
-    toast(`Connected to ${b.name}! +$${b.monthly}/mo`, '🎉');
-  }, 700);
+    toast(`Connected to ${b.name}! +$${b.monthly}/mo`,'🎉');
+  },700);
 }
 
-function confirmDisconnect(id) {
-  const b = BUYERS.find(x => x.id===id);
-  showModal(
-    `Disconnect from ${b.name}?`,
-    `You'll stop earning $${b.monthly}/mo from this license. You can reconnect at any time from the Marketplace.`,
-    () => disconnectBuyer(id)
-  );
+function confirmDisconnect(id){
+  const b=BUYERS.find(x=>x.id===id);
+  showModal(`Disconnect from ${b.name}?`,`You'll stop earning $${b.monthly}/mo from this license. You can reconnect at any time from the Marketplace.`,()=>disconnectBuyer(id));
 }
 
-function disconnectBuyer(id) {
-  const b = BUYERS.find(x => x.id===id);
+function disconnectBuyer(id){
+  const b=BUYERS.find(x=>x.id===id);
   STATE.connected.delete(id);
   renderAll();
-  toast(`Disconnected from ${b.name}`, '👋');
+  toast(`Disconnected from ${b.name}`,'👋');
 }
 
-// ─── ROUTER ──────────────────────────────────────────────────────────────────
-function navigate(view) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('nav a').forEach(a => a.classList.toggle('active', a.dataset.view===view));
+function navigate(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.view===view));
   document.getElementById('view-'+view).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
-  if (view==='analytics') { renderTransactions('txBodyAnalytics',20); renderAnalyticsKPIs(); initAnalyticsCharts(); }
+  if(view==='analytics'){renderTransactions('txBodyAnalytics',20);renderAnalyticsKPIs();initAnalyticsCharts();}
 }
 
-// ─── SETTINGS ────────────────────────────────────────────────────────────────
-function showPanel(panel, navEl) {
-  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
-  document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+function showPanel(panel,navEl){
+  document.querySelectorAll('.settings-nav-item').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('.settings-panel').forEach(p=>p.classList.remove('active'));
   navEl.classList.add('active');
   document.getElementById('panel-'+panel).classList.add('active');
 }
 
-function selectOption(el) {
-  el.closest('.settings-section').querySelectorAll('.payout-option').forEach(o => o.classList.remove('selected'));
+function selectOption(el){
+  el.closest('.settings-section').querySelectorAll('.payout-option').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
   toast('Preference saved','✅');
 }
 
-function saveProfile() { toast('Changes saved successfully','✅'); }
+function saveProfile(){toast('Changes saved successfully','✅');}
 
-function removeDevice(id, name) {
-  showModal(`Remove ${name}?`, 'This device will be unlinked from your account. You can re-add it later.', () => {
-    const el = document.getElementById(id);
-    if (el) { el.style.opacity='0'; setTimeout(()=>el.remove(),300); }
+function removeDevice(id,name){
+  showModal(`Remove ${name}?`,'This device will be unlinked from your account. You can re-add it later.',()=>{
+    const el=document.getElementById(id);
+    if(el){el.style.opacity='0';setTimeout(()=>el.remove(),300);}
     toast(`${name} removed`,'🗑️');
   });
 }
 
-// ─── MARKETPLACE FILTER ───────────────────────────────────────────────────────
-function filterMkt(btn, cat) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+function filterMkt(btn,cat){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.mkt-card').forEach(c => { c.style.display = (cat==='all'||c.dataset.cat===cat)?'':'none'; });
+  document.querySelectorAll('.mkt-card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none';});
 }
 
-// ─── CHARTS ──────────────────────────────────────────────────────────────────
-let dashChart, weeklyChart, categoryChart;
+let dashChart,weeklyChartInst,categoryChartInst;
+const chartData={'1M':{labels:['W1','W2','W3','W4'],data:[38,44,51,53]},'6M':{labels:['Dec','Jan','Feb','Mar','Apr','May'],data:[118.4,134.2,151.8,163.5,163.45,186.4]},'1Y':{labels:['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'],data:[82,91,104,112,118,128,118,134,152,164,163,186]}};
+const weeklyData={'4W':{labels:['W1','W2','W3','W4'],data:[48,55,50,67]},'12W':{labels:['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'],data:[38,44,41,52,48,55,50,59,53,61,58,67]},'1Y':{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],data:[128,138,149,155,163,148,141,152,159,164,171,178]}};
 
-const chartData = {
-  '1M': { labels:['W1','W2','W3','W4'], data:[38,44,51,53] },
-  '6M': { labels:['Dec','Jan','Feb','Mar','Apr','May'], data:[118.4,134.2,151.8,163.5,163.45,186.4] },
-  '1Y': { labels:['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'], data:[82,91,104,112,118,128,118,134,152,164,163,186] },
-};
-const weeklyData = {
-  '4W':  { labels:['W1','W2','W3','W4'], data:[48,55,50,67] },
-  '12W': { labels:['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'], data:[38,44,41,52,48,55,50,59,53,61,58,67] },
-  '1Y':  { labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], data:[128,138,149,155,163,148,141,152,159,164,171,178] },
-};
+function mkGrad(ctx,h,c1,c2){const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,c1);g.addColorStop(1,c2);return g;}
 
-function makeGrad(ctx, h, c1, c2) {
-  const g = ctx.createLinearGradient(0,0,0,h);
-  g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
+function initDashChart(){
+  const ctx=document.getElementById('earningsChart').getContext('2d');
+  const g=mkGrad(ctx,200,'rgba(94,227,180,.28)','rgba(94,227,180,0)');
+  const d=chartData['6M'];
+  dashChart=new Chart(ctx,{type:'line',data:{labels:d.labels,datasets:[{data:d.data,borderColor:'#5ee3b4',borderWidth:2.2,pointBackgroundColor:'#5ee3b4',pointBorderColor:'#0a0e1a',pointBorderWidth:2,pointRadius:4,pointHoverRadius:6,fill:true,backgroundColor:g,tension:.42}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'#162032',borderColor:'rgba(94,227,180,.25)',borderWidth:1,titleColor:'#7a8ea8',bodyColor:'#f0f4ff',bodyFont:{family:'Outfit',size:14,weight:'600'},padding:10,callbacks:{label:c=>' $'+c.parsed.y.toFixed(2)}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11}},border:{display:false}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11},callback:v=>'$'+v,maxTicksLimit:5},border:{display:false}}}}});
 }
 
-function initDashChart() {
-  const ctx = document.getElementById('earningsChart').getContext('2d');
-  const g = makeGrad(ctx,200,'rgba(94,227,180,.28)','rgba(94,227,180,0)');
-  const d = chartData['6M'];
-  dashChart = new Chart(ctx, { type:'line', data:{ labels:d.labels, datasets:[{ data:d.data, borderColor:'#5ee3b4', borderWidth:2.2, pointBackgroundColor:'#5ee3b4', pointBorderColor:'#0a0e1a', pointBorderWidth:2, pointRadius:4, pointHoverRadius:6, fill:true, backgroundColor:g, tension:.42 }] }, options:{ responsive:true, maintainAspectRatio:false, interaction:{intersect:false,mode:'index'}, plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#162032', borderColor:'rgba(94,227,180,.25)', borderWidth:1, titleColor:'#7a8ea8', bodyColor:'#f0f4ff', bodyFont:{family:'Outfit',size:14,weight:'600'}, padding:10, callbacks:{ label: c=>' $'+c.parsed.y.toFixed(2) } } }, scales:{ x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11}}, border:{display:false} }, y:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11},callback:v=>'$'+v,maxTicksLimit:5}, border:{display:false} } } } });
-}
-
-function setDashPeriod(key, btn) {
+function setDashPeriod(key,btn){
   document.getElementById('dashPeriod').querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  const d = chartData[key];
-  dashChart.data.labels = d.labels;
-  dashChart.data.datasets[0].data = d.data;
-  dashChart.update();
+  const d=chartData[key];dashChart.data.labels=d.labels;dashChart.data.datasets[0].data=d.data;dashChart.update();
 }
 
-let analyticsInited = false;
-function initAnalyticsCharts() {
-  if (analyticsInited) return;
-  analyticsInited = true;
-
-  const wctx = document.getElementById('weeklyChart').getContext('2d');
-  const wg = makeGrad(wctx,260,'rgba(94,227,180,.7)','rgba(94,227,180,.1)');
-  const wd = weeklyData['12W'];
-  weeklyChart = new Chart(wctx, { type:'bar', data:{ labels:wd.labels, datasets:[{ data:wd.data, backgroundColor:wg, borderRadius:5, borderSkipped:false }] }, options:{ responsive:true, maintainAspectRatio:false, interaction:{intersect:false,mode:'index'}, plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#162032', borderColor:'rgba(94,227,180,.25)', borderWidth:1, bodyColor:'#f0f4ff', bodyFont:{family:'Outfit',size:13,weight:'600'}, padding:10, callbacks:{ label: c=>' $'+c.parsed.y+'.00' } } }, scales:{ x:{ grid:{display:false}, ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11}}, border:{display:false} }, y:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11},callback:v=>'$'+v,maxTicksLimit:5}, border:{display:false} } } } });
-
-  const dctx = document.getElementById('categoryChart').getContext('2d');
-  categoryChart = new Chart(dctx, { type:'doughnut', data:{ labels:['Healthcare','Research','AI Training','Advertising','Robotics'], datasets:[{ data:[33,25,16,17,9], backgroundColor:['#5ee3b4','#60a5fa','#a78bfa','#fbbf24','#f472b6'], borderColor:'#111827', borderWidth:3, hoverOffset:6 }] }, options:{ responsive:true, maintainAspectRatio:false, cutout:'68%', plugins:{ legend:{ position:'bottom', labels:{ color:'#7a8ea8', font:{family:'DM Sans',size:11}, padding:12, boxWidth:10, boxHeight:10 } }, tooltip:{ backgroundColor:'#162032', borderColor:'rgba(94,227,180,.25)', borderWidth:1, bodyColor:'#f0f4ff', bodyFont:{family:'Outfit',size:13,weight:'600'}, padding:10, callbacks:{ label: c=>` ${c.label}: ${c.parsed}%` } } } } });
+let analyticsInited=false;
+function initAnalyticsCharts(){
+  if(analyticsInited)return;analyticsInited=true;
+  const wctx=document.getElementById('weeklyChart').getContext('2d');
+  const wg=mkGrad(wctx,260,'rgba(94,227,180,.7)','rgba(94,227,180,.1)');
+  const wd=weeklyData['12W'];
+  weeklyChartInst=new Chart(wctx,{type:'bar',data:{labels:wd.labels,datasets:[{data:wd.data,backgroundColor:wg,borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'#162032',borderColor:'rgba(94,227,180,.25)',borderWidth:1,bodyColor:'#f0f4ff',bodyFont:{family:'Outfit',size:13,weight:'600'},padding:10,callbacks:{label:c=>' $'+c.parsed.y+'.00'}}},scales:{x:{grid:{display:false},ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11}},border:{display:false}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7a8ea8',font:{family:'DM Sans',size:11},callback:v=>'$'+v,maxTicksLimit:5},border:{display:false}}}}});
+  const dctx=document.getElementById('categoryChart').getContext('2d');
+  categoryChartInst=new Chart(dctx,{type:'doughnut',data:{labels:['Healthcare','Research','AI Training','Advertising','Robotics'],datasets:[{data:[33,25,16,17,9],backgroundColor:['#5ee3b4','#60a5fa','#a78bfa','#fbbf24','#f472b6'],borderColor:'#111827',borderWidth:3,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{color:'#7a8ea8',font:{family:'DM Sans',size:11},padding:12,boxWidth:10,boxHeight:10}},tooltip:{backgroundColor:'#162032',borderColor:'rgba(94,227,180,.25)',borderWidth:1,bodyColor:'#f0f4ff',bodyFont:{family:'Outfit',size:13,weight:'600'},padding:10,callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}}}}});
 }
 
-function setWeeklyPeriod(key, btn) {
+function setWeeklyPeriod(key,btn){
   btn.closest('.chart-period').querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  const d = weeklyData[key];
-  weeklyChart.data.labels = d.labels;
-  weeklyChart.data.datasets[0].data = d.data;
-  weeklyChart.update();
+  const d=weeklyData[key];weeklyChartInst.data.labels=d.labels;weeklyChartInst.data.datasets[0].data=d.data;weeklyChartInst.update();
 }
 
-// ─── TOAST ────────────────────────────────────────────────────────────────────
-function toast(msg, icon='✓') {
-  const c = document.getElementById('toastContainer');
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.innerHTML = `<span class="toast-icon">${icon}</span>${msg}`;
+function toast(msg,icon='✓'){
+  const c=document.getElementById('toastContainer');
+  const el=document.createElement('div');el.className='toast';
+  el.innerHTML=`<span class="toast-icon">${icon}</span>${msg}`;
   c.appendChild(el);
-  setTimeout(() => {
-    el.classList.add('removing');
-    setTimeout(()=>el.remove(), 300);
-  }, 3200);
+  setTimeout(()=>{el.classList.add('removing');setTimeout(()=>el.remove(),300);},3200);
 }
 
-// ─── MODAL ────────────────────────────────────────────────────────────────────
-function showModal(title, body, onConfirm) {
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `
-    <div class="modal">
-      <h3>${title}</h3>
-      <p>${body}</p>
-      <div class="modal-actions">
-        <button class="btn btn-outline" id="modalCancel">Cancel</button>
-        <button class="btn btn-teal" id="modalConfirm">Confirm</button>
-      </div>
-    </div>`;
+function showModal(title,body,onConfirm){
+  const overlay=document.createElement('div');overlay.className='modal-overlay';
+  overlay.innerHTML=`<div class="modal"><h3>${title}</h3><p>${body}</p><div class="modal-actions"><button class="btn btn-outline" id="mCancel">Cancel</button><button class="btn btn-teal" id="mConfirm">Confirm</button></div></div>`;
   document.body.appendChild(overlay);
-  overlay.querySelector('#modalCancel').onclick = () => overlay.remove();
-  overlay.querySelector('#modalConfirm').onclick = () => { overlay.remove(); onConfirm(); };
-  overlay.addEventListener('click', e => { if (e.target===overlay) overlay.remove(); });
+  overlay.querySelector('#mCancel').onclick=()=>overlay.remove();
+  overlay.querySelector('#mConfirm').onclick=()=>{overlay.remove();onConfirm();};
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 renderAll();
 initDashChart();
 </script>
